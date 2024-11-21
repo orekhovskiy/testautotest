@@ -1,0 +1,31 @@
+name: Save Env Value to File
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  save-env-to-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Retrieve and store environment variable in a file
+        env:
+          MY_ENV_VAR: ${{ secrets.MY_ENV_VAR }}
+        run: |
+          echo "$MY_ENV_VAR" > output.txt
+          echo "Saved environment variable to output.txt"
+
+      - name: Display the file content (optional)
+        run: |
+          cat output.txt
+
+      - name: Upload file to artifacts (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: env-file
+          path: output.txt
